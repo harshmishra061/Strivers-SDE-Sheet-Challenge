@@ -1,0 +1,28 @@
+#include <bits/stdc++.h> 
+long long maxSubarraySum(int arr[], int n)
+{
+    // Dynamic Programming
+    long long res = max(0, arr[0]);
+    vector<long long> dp(n); // dp[i] -> maximum subarray sum ending at idx i
+    dp[0] = arr[0];
+    for(int i = 1;i < n;i++) {
+        dp[i] = max(1LL*arr[i], dp[i - 1] + arr[i]);
+        res = max(res, dp[i]);
+    }
+    return res;
+}
+
+
+
+//Optimized
+#include <bits/stdc++.h> 
+long long maxSubarraySum(int arr[], int n)
+{
+    long long maxsum = 0, currsum = 0;
+    for(int i = 0;i < n;i++) {
+        currsum = max(currsum + arr[i], 1LL*arr[i]);
+        maxsum = max(maxsum, currsum);
+    }
+    return maxsum;
+}
+

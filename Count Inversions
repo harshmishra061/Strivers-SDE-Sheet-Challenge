@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+
+long long merge(long long* arr, int start, int mid, int end) {
+    vector<long long> tarr(end - start + 1);
+    long long count = 0;
+    int i = start, j = mid + 1, k = 0;
+    while(i <= mid && j <= end) {
+        if(arr[i] <= arr[j]) {
+            tarr[k++] = arr[i++];
+        } else {
+            count += mid - i + 1;
+            tarr[k++] = arr[j++];
+        }
+    }
+    while(i <= mid) tarr[k++] = arr[i++];
+    while(j <= end) tarr[k++] = arr[j++];
+
+    for(int i = 0;i < tarr.size();i++) {
+        arr[start + i] = tarr[i];
+    }
+    return count;
+}
+long long mergeSort(long long* arr, int start, int end) {
+    if(start >= end) return 0;
+    long long count = 0;
+    int mid = start + (end - start) / 2;
+    count += mergeSort(arr, start, mid);
+    count += mergeSort(arr, mid + 1, end);
+    count += merge(arr, start, mid, end);
+    return count;
+}
+
+long long getInversions(long long *arr, int n){
+    return mergeSort(arr, 0, n - 1);
+}

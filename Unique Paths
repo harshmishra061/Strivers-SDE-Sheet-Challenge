@@ -1,0 +1,7 @@
+#include <bits/stdc++.h> 
+map<pair<int, int>, int> memo;
+int uniquePaths(int m, int n) {
+	if(m == 1 || n == 1) return 1;
+	if(memo.find({m, n}) != memo.end())	return memo[{m, n}];
+    return memo[{m, n}] = uniquePaths(m, n - 1) + uniquePaths(m - 1, n);
+}

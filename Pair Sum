@@ -1,0 +1,16 @@
+#include <bits/stdc++.h>
+
+vector<vector<int>> pairSum(vector<int> &arr, int s){
+   map<int, int> freq;
+   sort(arr.begin(), arr.end());
+   vector<vector<int>> res;
+   for(auto num : arr) {
+      if(freq.find(s - num) != freq.end()) {
+         int cnt = freq[s - num];
+         while(cnt--) res.push_back({s - num, num});
+      }
+      freq[num]++;
+   }
+   reverse(res.begin(), res.end());
+   return res;
+}

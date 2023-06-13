@@ -1,0 +1,16 @@
+#include <bits/stdc++.h>
+
+int LongestSubsetWithZeroSum(vector < int > arr) {
+  int n = arr.size(), res = 0, preSum = 0;
+  map<int, int> mp;
+  mp[0] = -1;
+  for(int i = 0;i < n;i++) {
+    preSum += arr[i];
+    if(mp.find(preSum) != mp.end()) {
+      res = max(res, i - mp[preSum]);
+    } else {
+      mp[preSum] = i;
+    }
+  }
+  return res;
+}

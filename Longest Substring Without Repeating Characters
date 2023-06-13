@@ -1,0 +1,15 @@
+#include <bits/stdc++.h> 
+int uniqueSubstrings(string str)
+{
+    int n = str.size(), j = 0, res = 0;
+    map<char, int> mp;
+    for(int i = 0;i < n;i++) {
+        mp[str[i]]++;
+        while(mp[str[i]] > 1) {
+            mp[str[j]]--;
+            j++;
+        }
+        res = max(res, i - j + 1);
+    }
+    return res;
+}

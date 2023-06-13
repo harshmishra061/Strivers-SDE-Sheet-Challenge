@@ -1,0 +1,18 @@
+#include <bits/stdc++.h>
+
+int subarraysXor(vector<int> &arr, int x)
+{
+    int n = arr.size(), res = 0, preXor = 0;
+    map<int, int> mp;
+    mp[0] = 1;
+
+    for(int i = 0;i < n;i++) {
+        preXor ^= arr[i];
+        if(mp.find(x ^ preXor) != mp.end()) {
+            res += mp[x ^ preXor];
+        }
+        mp[preXor]++;
+    }
+
+    return res;
+}

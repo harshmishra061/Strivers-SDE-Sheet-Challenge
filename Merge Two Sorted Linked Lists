@@ -1,0 +1,18 @@
+Node<int>* sortTwoLists(Node<int>* first, Node<int>* second)
+{
+    Node<int>* dummy = new Node<int>(-1);
+    Node<int>* itr = dummy;
+    while(first != NULL && second != NULL) {
+        if(first->data < second->data) {
+            itr->next = first;
+            first = first->next;
+        } else {
+            itr->next = second;
+            second = second->next;
+        }
+        itr = itr->next;
+    }
+    if(first != NULL) itr->next = first;
+    if(second != NULL) itr->next = second;
+    return dummy->next;
+}

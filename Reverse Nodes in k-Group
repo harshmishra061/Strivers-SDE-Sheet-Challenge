@@ -1,0 +1,37 @@
+Node* reverse(Node* curr, Node* prev) {
+	while(curr != NULL) {
+		Node* next = curr->next;
+		curr->next = prev;
+		prev = curr;
+		curr = next;
+	}
+	return prev;
+}
+
+
+Node* getListAfterReverseOperation2(Node* head, int n, int b[], int idx) {
+	if(head == NULL) return NULL;
+	if(idx == n) return head;
+	if(b[idx] == 0) return getListAfterReverseOperation2(head, n , b, idx + 1);
+
+	int reqLen = b[idx];
+	int len = 1;
+	Node* itr = head;
+
+	while(itr->next != NULL && len != reqLen) {
+		len++;
+		itr = itr->next;
+	}
+	
+	Node* nxtHead = itr->next;
+	itr->next = NULL;
+	Node* revnextHead = getListAfterReverseOperation2(nxtHead, n,b,idx + 1);
+	
+	return reverse(head, revnextHead);
+}
+
+
+
+Node *getListAfterReverseOperation(Node *head, int n, int b[]){
+	return getListAfterReverseOperation2(head, n, b, 0);
+}

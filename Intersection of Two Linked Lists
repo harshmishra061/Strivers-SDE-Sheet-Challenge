@@ -1,0 +1,24 @@
+int findLength(Node* head) {
+    int len = 0;
+    while(head != NULL) {
+        len++;
+        head = head->next;
+    }
+    return len;
+}
+
+Node* findIntersection(Node *firstHead, Node *secondHead)
+{
+    int len1 = findLength(firstHead);
+    int len2 = findLength(secondHead);
+
+    while(len1 > len2) {len1--, firstHead = firstHead->next;};
+    while(len2 > len1) {len2--, secondHead = secondHead->next;};
+
+    while(firstHead != secondHead) {
+        firstHead = firstHead->next;
+        secondHead = secondHead->next;
+    }
+    
+    return firstHead;    
+}

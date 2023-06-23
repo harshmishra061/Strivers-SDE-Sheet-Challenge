@@ -1,0 +1,29 @@
+int calcLen(Node* node) {
+     int len = 0;
+     while(node != NULL) {
+          len++;
+          node = node->next;
+     }
+     return len;
+}
+
+
+Node *rotate(Node *head, int k) {
+     int n = calcLen(head);
+     k = k % n;
+     if(k == 0) return head;
+     Node* itr = head, *ptr1 = NULL, *ptr2 = NULL;
+     for(int i = 0;i < n;i++) {
+          if(i == n - k - 1) {
+               ptr1 = itr;
+          } else if(i == n - 1) {
+               ptr2 = itr;
+          }
+          itr = itr->next;
+     }
+     ptr2->next = head;
+     head = ptr1->next;
+     ptr1->next = NULL;
+     return head;
+
+}

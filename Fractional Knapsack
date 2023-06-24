@@ -1,0 +1,16 @@
+#include <bits/stdc++.h> 
+double maximumValue (vector<pair<int, int>>& items, int n, int w)
+{
+    sort(items.begin(), items.end(), [](pair<int, int> &a, pair<int, int> &b) {
+        return a.second*b.first > b.second*a.first;
+    });
+    double res = 0;  
+    int i = 0; 
+    while(i < items.size() && w > 0) {
+        int minw = min(w, items[i].first);
+        w -= minw;
+        res += minw * (1.0 * items[i].second/items[i].first);
+        i++;
+    }   
+    return res;
+}

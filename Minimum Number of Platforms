@@ -1,0 +1,18 @@
+int calculateMinPatforms(int at[], int dt[], int n) {
+    vector<pair<int, int>> arr;
+    for(int i = 0;i < n;i++) {
+        arr.push_back(make_pair(at[i], dt[i]));
+    }
+    sort(arr.begin(), arr.end());
+    
+    priority_queue<int, vector<int>, greater<int>> pq;
+    pq.push(arr[0].second);
+    for(int i = 1;i < n;i++) {
+        if(pq.top() < arr[i].first) {
+            pq.pop();
+        }
+        pq.push(arr[i].second);
+    }
+    return pq.size();
+
+}

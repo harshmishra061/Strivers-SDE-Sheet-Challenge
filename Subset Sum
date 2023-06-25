@@ -1,0 +1,15 @@
+vector<int> subsetSum(vector<int> &nums){
+	int n = nums.size();
+	vector<int> res;
+	for(int mask = 0;mask < (1 << n);mask++) {
+		int sum = 0;
+		for(int pos = 0;pos < n;pos++) {
+			if(mask & (1 << pos)) {
+				sum += nums[pos];
+			}
+		}
+		res.push_back(sum);
+	}
+	sort(res.begin(), res.end());
+	return res;
+}

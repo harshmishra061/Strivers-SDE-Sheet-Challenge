@@ -1,0 +1,24 @@
+void rec(int idx, vector<int>& farr, int sum, vector<int>& vec, vector<vector<int>>& res, int target) {
+	if(sum == target) {
+		res.push_back(vec);
+	}
+
+	for(int i = idx;i <= 30;i++) {
+		if(farr[i] > 0) {
+			farr[i]--;
+			vec.push_back(i);
+			rec(i, farr, sum + i, vec, res, target);
+			farr[i]++;
+			vec.pop_back();
+		}
+	}
+}
+
+vector<vector<int>> combinationSum2(vector<int> &arr, int n, int target){
+	vector<int> farr(31);
+	for(auto& num : arr) farr[num]++;
+	vector<vector<int>> res;
+	vector<int> vec;
+	rec(0, farr, 0, vec, res, target);
+	return res;
+}

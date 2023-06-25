@@ -1,0 +1,24 @@
+#include <bits/stdc++.h>
+
+void genSub(int idx, vector<int>& farr, vector<int>& vec, vector<vector<int>>& res) {
+    res.push_back(vec);
+    for(int i = idx;i <= 100;i++) {
+        if(farr[i] > 0) {
+            farr[i]--;
+            vec.push_back(i);
+            genSub(i, farr, vec, res);
+            vec.pop_back();
+            farr[i]++;
+        }
+    }
+}
+
+vector<vector<int>> uniqueSubsets(int n, vector<int> &arr)
+{
+    vector<int> farr(101);
+    for(auto& num : arr) farr[num]++;
+    vector<vector<int>> res;
+    vector<int> vec;
+    genSub(0, farr, vec, res);
+    return res;
+}

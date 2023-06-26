@@ -1,0 +1,19 @@
+#include <bits/stdc++.h>
+
+void findPerm(int idx, string& s, vector<string>& res) {
+    if(idx == s.size()) {
+        res.push_back(s);
+    } else {
+        for(int i = idx;i < s.size();i++) {
+            swap(s[i], s[idx]);
+            findPerm(idx + 1, s, res);
+            swap(s[i], s[idx]);
+        }
+    }
+}
+
+vector<string> findPermutations(string &s) {
+    vector<string> res;
+    findPerm(0, s, res);
+    return res;
+}

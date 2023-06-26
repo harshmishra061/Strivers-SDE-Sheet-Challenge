@@ -1,0 +1,51 @@
+#include<bits/stdc++.h>
+
+bool PossibleToPut(int val, int r, int c, vector<int>& row, vector<int>& col, vector<vector<int>>& subMat) {
+    if(row[r] & (1 << val)) return false;
+    if(col[c] & (1 << val)) return false;
+    if(subMat[r/3][c/3] & (1 << val)) return false;
+    return true;
+}
+
+
+bool isItSudokuu(int r, int c, int matrix[9][9], vector<int>& row, vector<int>& col, vector<vector<int>>& subMat) {
+    if(r == 9) return true;
+    if(c == 9) return isItSudokuu(r + 1, 0, matrix, row, col, subMat);
+    if(matrix[r][c] != 0) return isItSudokuu(r, c + 1, matrix, row, col, subMat);
+
+    for(int val = 1;val <= 9;val++) {
+        if(PossibleToPut(val, r, c, row, col, subMat)) {
+            row[r] = (row[r] | (1 << val));
+            col[c] = (col[c] | (1 << val));
+            subMat[r/3][c/3] = (subMat[r/3][c/3] | (1 << val));
+
+            if(isItSudokuu(r, c + 1, matrix, row, col, subMat)) return true;
+
+            row[r] = (row[r] & (~(1 << val)));
+            col[c] = (col[c] & (~(1 << val)));
+            subMat[r/3][c/3] = (subMat[r/3][c/3] & (~(1 << val)));
+        }
+    } 
+
+    return false;
+}
+
+
+
+
+bool isItSudoku(int matrix[9][9]) {
+    vector<int> row(9, 0), col(9, 0);
+    vector<vector<int>> subMat(3, vector<int>(3, 0));
+
+    for(int i = 0;i < 9;i++) {
+        for(int j = 0;j < 9;j++) {
+            if(matrix[i][j] != 0) {
+                row[i] = (row[i] | (1 << matrix[i][j]));
+                col[j] = (col[j] | (1 << matrix[i][j]));
+                subMat[i/3][j/3] = (subMat[i/3][j/3] | (1 << matrix[i][j]));
+            }
+        }
+    }
+
+    return isItSudokuu(0, 0, matrix, row, col, subMat);
+}

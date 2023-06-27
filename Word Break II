@@ -1,0 +1,32 @@
+#include <bits/stdc++.h> 
+bool presentInDict(string& str, vector<string>& dict) {
+    for(auto& s : dict) {
+        if(str == s) return true;
+    }
+    return false;
+}
+vector<string> wordBreak2(int idx, string& s, vector<string>& dict) {
+    vector<string> res;
+    if(idx == s.size()) {
+        res.push_back("");
+        return res;
+    }
+
+    string str = "";
+    for(int i = idx;s[i];i++) {
+        str += s[i];
+        if(presentInDict(str, dict)) {
+            vector<string> recAns = wordBreak2(i + 1, s, dict);
+            for(auto& str2 : recAns) {
+                string newstr = str + " " + str2;
+                res.push_back(newstr);
+            }
+        }
+    }
+    return res;
+}
+
+vector<string> wordBreak(string &s, vector<string> &dictionary)
+{
+    return wordBreak2(0, s, dictionary);
+}

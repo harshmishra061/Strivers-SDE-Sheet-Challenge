@@ -1,0 +1,28 @@
+bool possibleToAssign(int node, int col, vector<vector<int>>& mat, vector<int>& assignedColor) {
+    for(int j = 0;j < mat.size();j++) {
+        if(mat[node][j] == 1 && assignedColor[j] == col) return false;
+    }
+    return true;
+}
+
+
+bool graphColoring2(int node, vector<vector<int>>& mat, int m, int n, vector<int>& assignedColor) {
+    if(node == n) return true;
+    
+    for(int col = 1;col <= m;col++) {
+        if(possibleToAssign(node, col, mat, assignedColor)) {
+            assignedColor[node] = col;
+            if(graphColoring2(node + 1, mat, m, n, assignedColor)) return true;
+            assignedColor[node] = 0;        
+        }
+    }
+    return false;
+}
+
+
+
+string graphColoring(vector<vector<int>> &mat, int m) {
+    int n = mat.size();
+    vector<int> assignedColor(n, 0);
+    return graphColoring2(0, mat, m, n, assignedColor) ? "YES" : "NO";
+}

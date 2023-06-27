@@ -1,0 +1,32 @@
+long long findPower(long long x, long long n, long long m) {
+  long long res = 1;
+  while(n) {
+    if(n % 2) {
+      res = res * x;
+      if(res > m) return res;
+      n--;
+    } else {
+      x = x * x;
+      if (x > m) return x;
+      n = n / 2;
+    }
+  }
+  return res;
+}
+
+
+int NthRoot(int n, int m) {
+  int low = 1, high = m;
+  while(low <= high) {
+    int x = low + (high - low) / 2;
+    long long xpown = findPower(x, n, m);
+    if(xpown == m) {
+      return x;
+    } else if(xpown > (long long)m) {
+      high = x - 1;
+    } else {
+      low = x + 1;
+    }
+  }
+  return -1;
+}

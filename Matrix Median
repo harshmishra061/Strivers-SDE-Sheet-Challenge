@@ -1,0 +1,30 @@
+#include<bits/stdc++.h>
+int helper(int val, vector<vector<int>>& matrix) {
+    int cnt = 0;
+    for(auto& vec : matrix) {
+        cnt += upper_bound(vec.begin(), vec.end(), val) - vec.begin();
+    }
+    return cnt;
+}
+
+int getMedian(vector<vector<int>> &matrix)
+{
+    int n = matrix.size();
+    int m = matrix[0].size();
+    int cntOfLessThanEqualEle = (n * m + 1) / 2;
+
+    int low = 1, high = 100000, res = -1;
+    while(low <= high) {
+        int mid = low + (high - low) / 2;
+        int cnt = helper(mid, matrix);
+        if(cnt < cntOfLessThanEqualEle) {
+            low = mid + 1;
+        } else {
+            res = mid;
+            high = mid - 1;
+        }
+    }
+    return res;
+
+    
+}

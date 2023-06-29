@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+int removeMinimum(vector<int>& Heap) {
+    int mini = Heap[0];
+    swap(Heap[0], Heap.back());
+    Heap.pop_back();
+    int par = 0;
+    while(true) {
+        int nextPos = par;
+        if(2 * par + 1 < Heap.size() && Heap[nextPos] > Heap[2 * par + 1]) nextPos = 2 * par + 1;
+        if(2 * par + 2 < Heap.size() && Heap[nextPos] > Heap[2 * par + 2]) nextPos = 2 * par + 2;
+        if(nextPos == par) break;
+        swap(Heap[par], Heap[nextPos]);
+        par = nextPos;
+    }
+    return mini;
+}
+
+
+void insert(int data, vector<int>& Heap) {
+    Heap.push_back(data);
+    int child = Heap.size() - 1;
+    while(child != 0) {
+        int par = (child - 1) / 2;
+        if(Heap[par] > Heap[child]) {
+            swap(Heap[par], Heap[child]);
+            child = par;
+        } else break;
+    }
+}
+
+
+vector<int> minHeap(int n, vector<vector<int>>& arr) {
+    vector<int> Heap;
+    vector<int> res;
+    for(auto& v : arr) {
+        if(v[0] == 0) {
+            insert(v[1], Heap);
+        } else {
+            if(Heap.size() > 0) {
+                res.push_back(removeMinimum(Heap));
+            }
+        }
+    }
+    return res;
+}

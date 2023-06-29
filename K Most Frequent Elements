@@ -1,0 +1,23 @@
+#include <bits/stdc++.h> 
+vector<int> KMostFrequent(int n, int k, vector<int> &arr)
+{
+    map<int, int> mp;
+    for(auto num : arr) mp[num]++; 
+    
+    vector<vector<int>> bucket(n + 1);
+    for(auto it : mp) {
+        bucket[it.second].push_back(it.first);
+    }
+
+    vector<int> res;
+    for(int i = n;i > 0 && k;i--) {
+        if(bucket[i].size() == 0) continue;
+        for(int j = 0;j < bucket[i].size() && k;j++) {
+            res.push_back(bucket[i][j]);
+            k--;
+        }
+    }
+    sort(res.begin(), res.end());
+    return res;
+
+}

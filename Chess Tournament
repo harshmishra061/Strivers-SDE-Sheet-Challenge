@@ -1,0 +1,27 @@
+#include <bits/stdc++.h>
+
+bool Possible(int gap, vector<int>& positions, int& n, int& c) {
+	int playerCount = 1, prevPos = positions[0];
+	for(int i = 1;i < n;i++) {
+		if(positions[i] - prevPos >= gap) {
+			playerCount++;
+			prevPos = positions[i];
+		}
+	}
+	return playerCount >= c;
+}
+
+int chessTournament(vector<int> positions , int n ,  int c){
+	sort(positions.begin(), positions.end());
+	int low = 0, high = 1e9, res = -1;
+	while(low <= high) {
+		int mid = low + (high - low) / 2;
+		if(Possible(mid, positions, n, c)) { // Is it possible to place c players if minimum gap allowed is mid
+			res = mid;
+			low = mid + 1;
+		} else {
+			high = mid - 1;
+		}
+	}
+	return res;
+}

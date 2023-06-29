@@ -1,0 +1,79 @@
+/*
+    Your Trie object will be instantiated and called as such:
+    Trie* obj = new Trie();
+    obj->insert(word);
+    bool check2 = obj->search(word);
+    bool check3 = obj->startsWith(prefix);
+ */
+struct trieNode {
+    trieNode* links[26];
+    bool flag;
+
+    trieNode() {
+        for(int i = 0;i < 26;i++) links[i] = NULL;
+        flag = false;
+    }
+
+    bool containsKey(char ch) {
+        return links[ch - 'a'] != NULL;
+    }
+
+
+    trieNode* getNode(char ch) {
+        return links[ch - 'a'];
+    }
+
+    void putNode(char ch, trieNode* node) {
+        links[ch - 'a'] = node;
+    }
+
+    bool getFlag() {
+        return flag;
+    }
+
+    void setFlag() {
+        flag = true;
+    }
+};
+
+class Trie {
+    trieNode* head;
+public:
+
+    /** Initialize your data structure here. */
+    Trie() {
+        head = new trieNode();
+    }
+
+    /** Inserts a word into the trie. */
+    void insert(string word) {
+        trieNode* itr = head;
+        for(auto ch : word) {
+            if(!itr->containsKey(ch)) {
+                itr->putNode(ch, new trieNode());
+            }
+            itr = itr->getNode(ch);
+        }
+        itr->setFlag();
+    }
+
+    /** Returns if the word is in the trie. */
+    bool search(string word) {
+        trieNode* itr = head;
+        for(auto ch : word) {
+            if(!itr->containsKey(ch)) return false;
+            itr = itr->getNode(ch);
+        }
+        return itr->getFlag();
+    }
+
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    bool startsWith(string prefix) {
+        trieNode* itr = head;
+        for(auto ch : prefix) {
+            if(!itr->containsKey(ch)) return false;
+            itr = itr->getNode(ch);
+        }
+        return true;
+    }
+};

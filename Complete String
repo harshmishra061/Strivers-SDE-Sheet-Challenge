@@ -1,0 +1,88 @@
+#include <bits/stdc++.h> 
+
+struct trieNode {
+    trieNode* links[26];
+    bool flag;
+
+    trieNode() {
+        for(int i = 0;i < 26;i++) links[i] = NULL;
+        flag = false;
+    }
+
+    bool containsKey(char ch) {
+        return links[ch - 'a'] != NULL;
+    }
+
+
+    trieNode* getNode(char ch) {
+        return links[ch - 'a'];
+    }
+
+    void putNode(char ch, trieNode* node) {
+        links[ch - 'a'] = node;
+    }
+
+    bool getFlag() {
+        return flag;
+    }
+
+    void setFlag() {
+        flag = true;
+    }
+};
+
+class Trie {
+    trieNode* head;
+public:
+
+    /** Initialize your data structure here. */
+    Trie() {
+        head = new trieNode();
+    }
+
+    /** Inserts a word into the trie. */
+    void insert(string word) {
+        trieNode* itr = head;
+        for(auto ch : word) {
+            if(!itr->containsKey(ch)) {
+                itr->putNode(ch, new trieNode());
+            }
+            itr = itr->getNode(ch);
+        }
+        itr->setFlag();
+    }
+
+    bool isComplete(string& str) {
+        trieNode* itr = head;
+        for(auto ch : str) {
+            itr = itr->getNode(ch);
+            if(!itr->getFlag()) return false;
+        }
+        return true;
+    }
+
+};
+
+
+
+string completeString(int n, vector<string> &a){
+    Trie* T = new Trie();
+    for(auto& str : a) {
+        T->insert(str);
+    }
+
+    string res = "";
+    for(auto& str : a) {
+        if(T->isComplete(str)) {
+            if(res.size() < str.size()) {
+                res = str;
+            } else if(res.size() == str.size()) {
+                if(res > str) {
+                    res = str;
+                }
+            }
+        }
+    }
+    if(res == "") return "None";
+    return res;
+}

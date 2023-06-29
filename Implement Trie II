@@ -1,0 +1,73 @@
+#include <bits/stdc++.h> 
+
+struct trieNode {
+    trieNode* links[26];
+    int prefCount;
+    int exctCount;
+    trieNode() {
+        for(int i = 0;i < 26;i++) links[i] = NULL;
+        prefCount = 0;
+        exctCount = 0;
+    }
+
+    bool containsKey(char ch) {
+        return links[ch - 'a'] != NULL;
+    }
+
+    void putNode(char ch, trieNode* node) {
+        links[ch - 'a'] = node;
+    }
+
+    trieNode* getNode(char ch) {
+        return links[ch - 'a'];
+    }
+};
+
+
+class Trie{
+    trieNode* head;
+    public:
+
+    Trie(){
+        head = new trieNode();
+    }
+
+    void insert(string &word) {
+        trieNode* itr = head;
+        for(auto& ch : word) {
+            if(!itr->containsKey(ch)) {
+                itr->putNode(ch, new trieNode());
+            }
+            itr = itr->getNode(ch);
+            itr->prefCount++;
+        }
+        itr->exctCount++;
+    }
+
+    int countWordsEqualTo(string &word){
+        trieNode* itr = head;
+        for(auto& ch : word) {
+            if(!itr->containsKey(ch)) return 0;
+            itr = itr->getNode(ch);
+        }
+        return itr->exctCount;
+    }
+
+    int countWordsStartingWith(string &word){
+        trieNode* itr = head;
+        for(auto& ch : word) {
+            if(!itr->containsKey(ch)) return 0;
+            itr = itr->getNode(ch);
+        }
+        return itr->prefCount;
+    }
+
+    void erase(string &word){
+        trieNode* itr = head;
+        for(auto& ch : word) {
+            itr = itr->getNode(ch);
+            itr->prefCount--;
+        }
+        itr->exctCount--;
+    }
+};

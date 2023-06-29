@@ -1,0 +1,24 @@
+#include <bits/stdc++.h> 
+
+vector<int> kMaxSumCombination(vector<int> &arr1, vector<int> &arr2, int n, int k){
+	priority_queue<int, vector<int>, greater<int>> minHeap;
+	for(auto& num1 : arr1) {
+		for(auto& num2 : arr2) {
+			int sum = num1 + num2;
+			if(minHeap.size() < k) {
+				minHeap.push(sum);
+			} else if (minHeap.top() < sum) {
+				minHeap.pop();
+				minHeap.push(sum);
+			}
+		}
+	}
+
+	vector<int> res;
+	while(!minHeap.empty()) {
+		res.push_back(minHeap.top());
+		minHeap.pop();
+	}
+	reverse(res.begin(), res.end());
+	return res;
+}

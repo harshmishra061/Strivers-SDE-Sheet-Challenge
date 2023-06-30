@@ -1,0 +1,32 @@
+#include <bits/stdc++.h> 
+class Queue {
+    vector<int> q;
+    int f, b;
+public:
+    Queue() {
+        q.resize(5004);
+        f = -1, b = 0;
+    }
+
+    /*----------------- Public Functions of Queue -----------------*/
+
+    bool isEmpty() {
+        return b - f == 1;
+    }
+
+    void enqueue(int data) {
+        q[b++] = data;
+    }
+
+    int dequeue() {
+        if(isEmpty()) return -1;
+        f++;
+        int data = q[f];
+        return data;
+    }
+
+    int front() {
+      if (isEmpty()) return -1;
+      return q[f + 1];
+    }
+};

@@ -1,0 +1,71 @@
+#include <bits/stdc++.h> 
+
+struct trieNode {
+    trieNode* links[2];
+    int data;
+    trieNode() {
+        links[0] = links[1] = NULL;
+        data = -1;
+    }
+
+    bool containsKey(int bit) {
+        return links[bit] != NULL;
+    }
+
+    void putNode(int bit, trieNode* node) {
+        links[bit] = node;
+    }
+
+    trieNode* getNode(int bit) {
+        return links[bit];
+    }
+};
+
+
+class Trie{
+    trieNode* head;
+    public:
+
+    Trie(){
+        head = new trieNode();
+    }
+
+    void insert(int num) {
+        trieNode* itr = head;
+        for(int i = 31;i >= 0;i--) {
+            int currbit = (num & (1 << i)) == 0 ? 0 : 1;
+            if(!itr->containsKey(currbit)) {
+                itr->putNode(currbit, new trieNode());
+            }
+            itr = itr->getNode(currbit);
+        }
+        itr->data = num;
+    }
+
+    int find(int num) {
+        trieNode* itr = head;
+        for(int i = 31;i >= 0;i--) {
+            int currbit = (num & (1 << i)) == 0 ? 0 : 1;
+            if(itr->containsKey(!currbit)) {
+                itr = itr->getNode(!currbit);
+            } else {
+                itr = itr->getNode(currbit);
+            }
+        }
+        return itr->data;
+    }
+    
+};
+
+
+int maximumXor(vector<int> arr)
+{   
+    int n = arr.size(), res = 0;
+    Trie* T = new Trie();
+    for(int i = 0;i < n;i++) {
+        T->insert(arr[i]);
+        int val = T->find(arr[i]); // Finds the best possible num such that arr[i] ^ num is maximum
+        res = max(res, arr[i] ^ val);
+    }
+    return res;
+}

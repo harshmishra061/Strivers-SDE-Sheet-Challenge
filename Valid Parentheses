@@ -1,0 +1,15 @@
+bool isValidParenthesis(string expression)
+{
+    stack<char> st;
+    for(auto& ch : expression) {
+        if(ch == '(' || ch == '{' || ch == '[') {
+            st.push(ch);
+        } else {
+          if (st.empty()) return false;
+          if (st.top() == '(' && ch == ')' || st.top() == '{' && ch == '}' || st.top() == '[' && ch == ']') {
+              st.pop();
+          } else return false;
+        }
+    }
+    return st.size() == 0;
+}

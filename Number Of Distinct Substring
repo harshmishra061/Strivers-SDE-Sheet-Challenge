@@ -1,0 +1,54 @@
+#include <bits/stdc++.h> 
+struct trieNode {
+    trieNode* links[26];
+    trieNode() {
+        for(int i = 0;i < 26;i++) links[i] = NULL;
+    }
+
+    bool containsKey(char ch) {
+        return links[ch - 'a'] != NULL;
+    }
+
+    void putNode(char ch, trieNode* node) {
+        links[ch - 'a'] = node;
+    }
+
+    trieNode* getNode(char ch) {
+        return links[ch - 'a'];
+    }
+};
+
+
+class Trie{
+    trieNode* head;
+    public:
+
+    Trie(){
+        head = new trieNode();
+    }
+
+    int insertAndCount(string &word, int i) {
+        trieNode* itr = head;
+        int count = 0;
+        for(;i < word.size();i++) {
+            if(!itr->containsKey(word[i])) {
+                itr->putNode(word[i], new trieNode());
+                count++;
+            }
+            itr = itr->getNode(word[i]);
+        }
+        return count;
+    }
+};
+
+
+
+
+int distinctSubstring(string &word) {
+    int count = 0;
+    Trie* T = new Trie();
+    for(int i = 0;i < word.size();i++) {
+        count += T->insertAndCount(word, i); // count strings starting from idx -> i and not present in trie
+    }
+    return count;
+}

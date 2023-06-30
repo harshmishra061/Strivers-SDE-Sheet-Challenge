@@ -1,0 +1,88 @@
+#include<bits/stdc++.h>
+struct trieNode {
+    trieNode* links[2];
+    int data;
+    trieNode() {
+        links[0] = links[1] = NULL;
+        data = -1;
+    }
+
+    bool containsKey(int bit) {
+        return links[bit] != NULL;
+    }
+
+    void putNode(int bit, trieNode* node) {
+        links[bit] = node;
+    }
+
+    trieNode* getNode(int bit) {
+        return links[bit];
+    }
+};
+
+
+class Trie{
+    trieNode* head;
+    public:
+
+    Trie(){
+        head = new trieNode();
+    }
+
+    void insert(int num) {
+        trieNode* itr = head;
+        for(int i = 31;i >= 0;i--) {
+            int currbit = (num & (1 << i)) == 0 ? 0 : 1;
+            if(!itr->containsKey(currbit)) {
+                itr->putNode(currbit, new trieNode());
+            }
+            itr = itr->getNode(currbit);
+        }
+        itr->data = num;
+    }
+
+    int find(int num) {
+        trieNode* itr = head;
+        for(int i = 31;i >= 0;i--) {
+            int currbit = (num & (1 << i)) == 0 ? 0 : 1;
+            if(itr->containsKey(!currbit)) {
+                itr = itr->getNode(!currbit);
+            } else {
+                itr = itr->getNode(currbit);
+            }
+        }
+        return itr->data;
+    }
+    
+};
+
+
+
+vector<int> maxXorQueries(vector<int> &arr, vector<vector<int>> &queries){
+	Trie* T = new Trie();
+	
+	sort(arr.begin(), arr.end());
+	vector<pair<int, pair<int, int>>> vec;
+	for(int i = 0;i < queries.size();i++) {
+		vec.push_back({queries[i][1], {queries[i][0], i}});
+	}
+	sort(vec.begin(), vec.end());
+	int i = 0;
+	vector<int> res(vec.size(), -1);
+	for(auto query : vec) {
+		int A = query.first;
+		int X = query.second.first;
+		int idx = query.second.second;
+
+		while(i < arr.size() && arr[i] <= A) {
+			T->insert(arr[i]);
+			i++;
+		}
+
+		if(i != 0) {
+        int Y = T->find(X);
+        res[idx] = (X^Y);
+		}
+	}
+	return res;
+}

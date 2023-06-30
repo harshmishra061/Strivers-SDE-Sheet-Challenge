@@ -1,0 +1,89 @@
+// When Insertion is Costly
+#include<bits/stdc++.h>
+using namespace std;
+class Queue {
+    stack<int> st1, st2;
+    
+    public:
+    Queue() { }
+
+    void enQueue(int val) {
+        while(!st1.empty()) {
+            st2.push(st1.top());
+            st1.pop();
+        }
+        st1.push(val);
+        while(!st2.empty()) {
+            st1.push(st2.top());
+            st2.pop();
+        }
+    }
+
+    int deQueue() {
+        if(st1.empty()) return -1;
+        int val = st1.top();
+        st1.pop();
+        return val;
+    }
+
+    int peek() {
+        if(st1.empty()) return -1;
+        return st1.top();
+    }
+
+    bool isEmpty() {
+        return st1.empty();
+    }
+};
+
+
+
+
+// When Deletion is Costly
+#include<bits/stdc++.h>
+using namespace std;
+class Queue {
+    stack<int> st1, st2;
+    
+    public:
+    Queue() { }
+
+    void enQueue(int val) {
+        st1.push(val);
+    }
+
+    int deQueue() {
+        if(st1.empty()) return -1;
+        while(st1.size() != 1) {
+            st2.push(st1.top());
+            st1.pop();
+        }
+        int val = st1.top();
+        st1.pop();
+        while(!st2.empty()) {
+            st1.push(st2.top());
+            st2.pop();
+        }
+        return val;
+    }
+
+    int peek() {
+        if(st1.empty()) return -1;
+        while(st1.size() != 1) {
+            st2.push(st1.top());
+            st1.pop();
+        }
+        int val = st1.top();
+        st2.push(st1.top());
+        st1.pop();
+        while(!st2.empty()) {
+            st1.push(st2.top());
+            st2.pop();
+        }
+        return val;
+    }
+
+    bool isEmpty() {
+        return st1.empty();
+    }
+};

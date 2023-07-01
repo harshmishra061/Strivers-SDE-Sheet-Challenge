@@ -1,0 +1,34 @@
+// Moving From End To Start
+#include<bits/stdc++.h>
+vector<int> nextSmallerElement(vector<int> &arr, int n)
+{
+    stack<int> st;
+    vector<int> nse(n, -1);
+    for(int i = n - 1;i >= 0;i--) {
+        while(!st.empty() && arr[i] <= st.top()) {
+            st.pop();
+        }
+
+        if(!st.empty()) {
+            nse[i] = st.top();
+        }
+        st.push(arr[i]);
+    }
+    return nse;
+}
+
+// Moving From Start To End
+#include<bits/stdc++.h>
+vector<int> nextSmallerElement(vector<int> &arr, int n)
+{
+    stack<int> st;
+    vector<int> nse(n, -1);
+    for(int i = 0;i < n;i++) {
+        while(!st.empty() && arr[st.top()] > arr[i]) {
+            nse[st.top()] = arr[i];
+            st.pop();
+        }
+        st.push(i);
+    }
+    return nse;
+}

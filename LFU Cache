@@ -1,0 +1,84 @@
+#include <bits/stdc++.h> 
+class LFUCache{
+    struct doublyLL {
+        int key;
+        int val;
+        int freq;
+        doublyLL* next, * prev;
+        doublyLL(int k, int v) {
+            key = k;
+            val = v;
+            freq = 1;
+            next = prev = NULL;
+        }
+    };
+    doublyLL* start, *end;
+    int cap, curr;
+    map<int, doublyLL*> mp;
+public:
+    LFUCache(int capacity)
+    {
+        cap = capacity, curr = 0;
+        start = new doublyLL(-1, -1);
+        end = new doublyLL(-1, -1);
+        start->next = end;
+        end->prev = start;
+    }
+
+    int get(int key)
+    {
+        if(mp.find(key) == mp.end()) return -1;
+        deleteNode(mp[key]);
+        insertNode(mp[key]);
+        mp[key]->freq++;
+        return mp[key]->val; 
+    }
+
+    void put(int key, int value)
+    {
+        if(mp.find(key) != mp.end()) {
+            mp[key]->val = value;
+            deleteNode(mp[key]);
+            insertNode(mp[key]);
+            mp[key]->freq++;
+        } else {
+            doublyLL* node = new doublyLL(key, value);
+            if(curr == cap) {
+                curr--;
+                doublyLL* node2 = findNodeWithMinFreq(start->next, end);
+                mp.erase(node2->key);
+                deleteNode(node2);
+            }
+            curr++;
+            mp[key] = node;
+            insertNode(node);
+        }
+    }
+
+    void insertNode(doublyLL* node) {
+        doublyLL* left = start;
+        doublyLL* right = start->next;
+        node->next = left->next;
+        left->next = node;
+        node->prev = right->prev;
+        right->prev = node;
+    }
+
+    void deleteNode(doublyLL* node) {
+        doublyLL* left = node->prev;
+        doublyLL* right = node->next;
+        left->next = right;
+        right->prev = left;
+    }
+
+    doublyLL* findNodeWithMinFreq(doublyLL* start, doublyLL* end) {
+        doublyLL* resNode = start;
+        while(start != end) {
+            if(resNode->freq >= start->freq) {
+                resNode = start;
+            }
+            start = start->next;
+        }
+        return resNode;
+    }
+};

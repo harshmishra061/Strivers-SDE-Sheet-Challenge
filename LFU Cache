@@ -143,15 +143,20 @@ public:
         ptr = 1;
     }
 
-    int get(int key)
-    {
-        if(mp.find(key) == mp.end()) return -1;
+    void updateList(int key) { // Move key's node from x freq Level to x + 1 freq Level
         vec[mp[key]->freq]->deleteNode(mp[key]);
+        if(ptr == mp[key]->freq && vec[mp[key]->freq]->isEmpty()) ptr++; 
         mp[key]->freq++;
         if(vec.size() == mp[key]->freq) {
             vec.push_back(new List());
         }
         vec[mp[key]->freq]->insertNode(mp[key]);
+    }
+
+    int get(int key)
+    {
+        if(mp.find(key) == mp.end()) return -1;
+        updateList(key);
         return mp[key]->val;
     }
 
@@ -159,15 +164,9 @@ public:
     {
         if(mp.find(key) != mp.end()) {
             mp[key]->val = value;
-            vec[mp[key]->freq]->deleteNode(mp[key]);
-            mp[key]->freq++;
-            if(vec.size() == mp[key]->freq) {
-                vec.push_back(new List());
-            }
-            vec[mp[key]->freq]->insertNode(mp[key]);
+            updateList(key);
         } else {
             if(curr == cap) {
-                while(vec[ptr]->isEmpty() == true) ptr++;
                 doublyLL* node2 = vec[ptr]->end->prev;
                 vec[ptr]->deleteNode(node2);
                 mp.erase(node2->key);

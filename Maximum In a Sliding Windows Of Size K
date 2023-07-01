@@ -1,0 +1,47 @@
+// Using stack
+#include <bits/stdc++.h> 
+vector<int> slidingWindowMaximum(vector<int> &arr, int &k)
+{
+    int n = arr.size();
+    vector<int> nge(n, n);
+    stack<int> st;
+    for(int i = n - 1 ;i >= 0;i--) {
+        while(!st.empty() && arr[i] >= arr[st.top()]) {
+            st.pop();
+        }
+        if(!st.empty()) {
+            nge[i] = st.top();
+        }
+        st.push(i);
+    }
+
+    vector<int> res;
+    int j = 0;
+    for(int i = 0;i <= n - k;i++) {
+        if(j < i) j = i;
+        while(nge[j] < i + k) {
+            j = nge[j];
+        }
+        res.push_back(arr[j]);
+    }
+    return res;
+}
+
+
+//Using Deque
+#include <bits/stdc++.h> 
+vector<int> slidingWindowMaximum(vector<int> &arr, int &k)
+{
+    int n = arr.size();
+    deque<int> q;
+    vector<int> res;
+    for(int i = 0; i < n;i++) {
+        while(!q.empty() && arr[q.back()] <= arr[i]) {
+            q.pop_back();
+        }
+        q.push_back(i);
+        if(q.front() == i - k) q.pop_front();
+        if(i >= k - 1) res.push_back(arr[q.front()]);
+    }
+    return res;
+}

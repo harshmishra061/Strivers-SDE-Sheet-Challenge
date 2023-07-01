@@ -1,0 +1,68 @@
+#include<bits/stdc++.h>
+class LRUCache{
+    struct doublyLL {
+        int key;
+        int val;
+        doublyLL* next, * prev;
+        doublyLL(int k, int v) {
+            key = k;
+            val = v;
+            next = prev = NULL;
+        }
+    };
+    doublyLL* start, *end;
+    int cap, curr;
+    map<int, doublyLL*> mp;
+public:
+    LRUCache(int capacity)
+    {
+        cap = capacity, curr = 0;
+        start = new doublyLL(-1, -1);
+        end = new doublyLL(-1, -1);
+        start->next = end;
+        end->prev = start;
+    }
+
+    int get(int key)
+    {
+        if(mp.find(key) == mp.end()) return -1;
+        deleteNode(mp[key]);
+        insertNode(mp[key]);
+        return mp[key]->val; 
+    }
+
+    void put(int key, int value)
+    {
+        if(mp.find(key) != mp.end()) {
+            mp[key]->val = value;
+            deleteNode(mp[key]);
+            insertNode(mp[key]);
+        } else {
+            doublyLL* node = new doublyLL(key, value);
+            if(curr == cap) {
+                curr--;
+                mp.erase(end->prev->key);
+                deleteNode(end->prev);
+            }
+            curr++;
+            mp[key] = node;
+            insertNode(node);
+        }
+    }
+
+    void insertNode(doublyLL* node) {
+        doublyLL* left = start;
+        doublyLL* right = start->next;
+        node->next = left->next;
+        left->next = node;
+        node->prev = right->prev;
+        right->prev = node;
+    }
+
+    void deleteNode(doublyLL* node) {
+        doublyLL* left = node->prev;
+        doublyLL* right = node->next;
+        left->next = right;
+        right->prev = left;
+    }
+};

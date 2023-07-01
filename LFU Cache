@@ -82,3 +82,102 @@ public:
         return resNode;
     }
 };
+
+
+
+// Another Method
+
+#include <bits/stdc++.h>
+struct doublyLL {
+    int key;
+    int val;
+    int freq;
+    doublyLL* next, * prev;
+    doublyLL(int k, int v) {
+        key = k;
+        val = v;
+        freq = 1;
+        next = prev = NULL;
+    }
+};
+struct List {
+    doublyLL* start, *end;
+    List() {
+        start = new doublyLL(-1, -1);
+        end = new doublyLL(-1, -1);
+        start->next = end;
+        end->prev = start;
+    }
+
+    void insertNode(doublyLL* node) {
+        doublyLL* left = start;
+        doublyLL* right = start->next;
+        node->next = left->next;
+        left->next = node;
+        node->prev = right->prev;
+        right->prev = node;
+    }
+
+    void deleteNode(doublyLL* node) {
+        doublyLL* left = node->prev;
+        doublyLL* right = node->next;
+        left->next = right;
+        right->prev = left;
+    }
+
+    bool isEmpty() {
+        return start->next == end;
+    }
+};
+class LFUCache{
+public:
+    vector<List*> vec;
+    int ptr;
+    int cap, curr;
+    map<int, doublyLL*> mp;
+    LFUCache(int capacity)
+    {
+        vec.push_back(new List());
+        vec.push_back(new List());
+        curr = 0, cap = capacity;
+        ptr = 1;
+    }
+
+    int get(int key)
+    {
+        if(mp.find(key) == mp.end()) return -1;
+        vec[mp[key]->freq]->deleteNode(mp[key]);
+        mp[key]->freq++;
+        if(vec.size() == mp[key]->freq) {
+            vec.push_back(new List());
+        }
+        vec[mp[key]->freq]->insertNode(mp[key]);
+        return mp[key]->val;
+    }
+
+    void put(int key, int value)
+    {
+        if(mp.find(key) != mp.end()) {
+            mp[key]->val = value;
+            vec[mp[key]->freq]->deleteNode(mp[key]);
+            mp[key]->freq++;
+            if(vec.size() == mp[key]->freq) {
+                vec.push_back(new List());
+            }
+            vec[mp[key]->freq]->insertNode(mp[key]);
+        } else {
+            if(curr == cap) {
+                while(vec[ptr]->isEmpty() == true) ptr++;
+                doublyLL* node2 = vec[ptr]->end->prev;
+                vec[ptr]->deleteNode(node2);
+                mp.erase(node2->key);
+                curr--;
+            }
+            curr++;
+            ptr = 1;
+            doublyLL* node = new doublyLL(key, value);
+            vec[ptr]->insertNode(node);
+            mp[key] = node;
+        }
+    }
+};

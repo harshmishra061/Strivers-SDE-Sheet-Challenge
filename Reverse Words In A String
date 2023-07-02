@@ -1,0 +1,21 @@
+#include<bits/stdc++.h>
+string reverseString(string &str){
+	int n = str.size();
+	stack<string> st;
+	for(int i = 0;i < n;i++) {
+		while(i < n && str[i] == ' ') i++;
+		if(i == n) continue;
+		string str2 = "";
+		while(i < n && str[i] != ' ') {
+			str2 += str[i++];
+		}
+		st.push(str2);
+	}
+	string res = "";
+	while(!st.empty()) {
+		res += st.top();
+		st.pop();
+		if(!st.empty()) res += ' ';
+	}
+	return res;
+}

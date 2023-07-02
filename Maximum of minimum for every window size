@@ -1,0 +1,21 @@
+// Similar to largest area in a Histogram Problem
+
+#include <bits/stdc++.h> 
+vector<int> maxMinWindow(vector<int> arr, int n) {
+    vector<int> res(n, INT_MIN);
+    stack<int> st;
+    for(int i = 0;i <= n;i++) {
+        while(!st.empty() && (arr[st.top()] > arr[i] || i == n)) {
+            int val = arr[st.top()]; st.pop();
+            int left = st.empty() ? -1 : st.top();
+            int right = i;
+            int idx = right - left - 2;
+            res[idx] = max(res[idx], val);
+        }
+        st.push(i);
+    }
+    for(int i = n - 2;i >= 0;i--) {
+        res[i] = max(res[i], res[i + 1]);
+    }
+    return res;
+}

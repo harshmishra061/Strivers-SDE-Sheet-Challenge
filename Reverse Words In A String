@@ -1,3 +1,4 @@
+// First Method -> Using Stack
 #include<bits/stdc++.h>
 string reverseString(string &str){
 	int n = str.size();
@@ -17,5 +18,23 @@ string reverseString(string &str){
 		st.pop();
 		if(!st.empty()) res += ' ';
 	}
+	return res;
+}
+
+// Second Method -> Using substr fxn
+#include<bits/stdc++.h>
+string reverseString(string &str){
+	int n = str.size();
+	string res = "";
+	int i = n - 1;
+	while(i >= 0) {
+		while(i >= 0 && str[i] == ' ') i--;
+		if(i == -1) break;
+		int j = i;
+		while(j >= 0 && str[j] != ' ') j--;
+		res += str.substr(j + 1, i - j) + " ";
+		i = j;
+	}
+	res.pop_back();
 	return res;
 }

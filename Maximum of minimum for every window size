@@ -1,4 +1,4 @@
-// Similar to largest area in a Histogram Problem
+// Similar to largest rectangle in a Histogram Problem
 
 #include <bits/stdc++.h> 
 vector<int> maxMinWindow(vector<int> arr, int n) {

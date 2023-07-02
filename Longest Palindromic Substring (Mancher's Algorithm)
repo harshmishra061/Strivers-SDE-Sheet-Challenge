@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+vector<int> Mancher(string& str) {
+    int n = str.size();
+    vector<int> lps(n, 0);
+    int c = 1, r = 1;
+    for(int i = 1;i < n - 1;i++) {
+        int mirr = c - (i - c);
+        if(i < r) {
+            lps[i] = min(lps[mirr], r - i);
+        }
+        while(str[i - lps[i] - 1] == str[i + lps[i] + 1]) lps[i]++;
+        if(i + lps[i] > r) {
+            c = i;
+            r = i + lps[i];
+        }
+    }
+    return lps;
+}
+
+string longestPalinSubstring(string str)
+{   // Using Mancher's Algorithm
+    int n = str.size();
+    string newstr = "@";
+    for(int i = 0;i < n;i++) {
+        newstr += "#";
+        newstr += str[i];
+    }
+    newstr += "#$";
+    vector<int> lps = Mancher(newstr);
+    int idx = 0;
+    for(int i = 1;i < lps.size();i++) {
+        if(lps[idx] < lps[i]) {
+            idx = i;
+        }
+    }
+    int startIdx = (idx - lps[idx]) / 2;
+    return str.substr(startIdx, lps[idx]);
+}

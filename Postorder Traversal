@@ -1,0 +1,43 @@
+void postorder(TreeNode* node, vector<int>& res) {
+    if(node == NULL) return;
+    postorder(node->left, res);
+    postorder(node->right, res);
+    res.push_back(node->data);
+}
+
+vector<int> getPostOrderTraversal(TreeNode *root)
+{
+    vector<int> res;
+    postorder(root, res);
+    return res;
+}
+
+//Iterative : Using Stack
+vector<int> getPostOrderTraversal(TreeNode *root)
+{
+    vector<int> res;
+    stack<TreeNode*> st;
+
+    while(root != NULL || !st.empty()) {
+        if(root != NULL) {
+            st.push(root);
+            root = root->left;
+        } else {
+            root = st.top();
+            if(root->right == NULL) {
+                st.pop();
+                res.push_back(root->data);
+
+                while(!st.empty() && st.top()->right == root) {
+                    root = st.top(); st.pop();
+                    res.push_back(root->data);
+                }
+                root = NULL;    
+            } else {
+                root = root->right;
+            }
+        }
+    }
+    return res;
+
+}

@@ -10,3 +10,23 @@ vector<int> getInOrderTraversal(TreeNode *root)
     inorder(root, res);
     return res;
 }
+
+
+// Iterative : Using Stack
+vector<int> getInOrderTraversal(TreeNode *root)
+{
+    vector<int> res; 
+    stack<TreeNode*> st;
+
+    while(root != NULL || !st.empty()) {
+        if(root != NULL) {
+            st.push(root);
+            root = root->left;
+        } else {
+           root = st.top(); st.pop();
+           res.push_back(root->data);
+           root = root->right;
+        }
+    }
+    return res;
+}

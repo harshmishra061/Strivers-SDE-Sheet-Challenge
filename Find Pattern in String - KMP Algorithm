@@ -1,0 +1,28 @@
+#include <bits/stdc++.h>
+vector<int> lps(string& str) {
+    int n = str.size();
+    vector<int> lpsArr(n, 0);
+    int i = 1, len = 0;
+    while(i < n) {
+        if(str[i] == str[len]) {
+            len++;
+            lpsArr[i] = len;
+            i++;
+        } else if(len > 0) {
+            len = lpsArr[len - 1];
+        } else {
+            i++;
+        }
+    }
+    return lpsArr;
+}
+
+bool findPattern(string p, string s)
+{
+    string str = p + "#" + s;
+    vector<int> lpsArr = lps(str); // Longest Proper Prefix which is Also a Proper Suffix
+    for(int i = 0;i < lpsArr.size();i++) {
+        if(lpsArr[i] == p.size()) return true;
+    } 
+    return false;
+}

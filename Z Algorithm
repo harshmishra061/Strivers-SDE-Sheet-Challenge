@@ -1,0 +1,27 @@
+vector<int> ZAlgo(string& str) {
+	int n = str.size();
+	vector<int> zarr(n);
+	int l = 1, r = 1;
+	for(int i = 1;i < n;i++) {
+		if(i < r) {
+			zarr[i] = min(zarr[i - l], r - i);
+		}
+		while(i + zarr[i] < n && str[zarr[i]] == str[i + zarr[i]]) zarr[i]++;
+		if(i + zarr[i] > r) {
+			l = i;
+			r = i + zarr[i];
+		}
+	}
+	return zarr;
+}
+
+int zAlgorithm(string s, string p, int n, int m)
+{
+	int res = 0;
+	string str = p + "#" + s;
+	vector<int> zarr = ZAlgo(str);
+	for(int i = 1;i < zarr.size();i++) {
+		if(zarr[i] == p.size()) res++;
+	}
+	return res;
+}

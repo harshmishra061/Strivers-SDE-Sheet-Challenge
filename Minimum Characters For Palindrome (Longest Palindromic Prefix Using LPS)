@@ -1,0 +1,25 @@
+int lps(string& str) { // Longest Proper Prefix which is also a Proper Suffix
+	int n = str.size();
+	vector<int> lpsArr(n, 0);
+	int i = 1, len = 0;
+	while(i < n) {
+		if(str[i] == str[len]) {
+			len++;
+			lpsArr[i] = len;
+			i++;
+		} else if(len > 0) {
+			len = lpsArr[len - 1];
+		} else {
+			i++;
+		}
+	}
+	return lpsArr[n - 1];
+}
+int minCharsforPalindrome(string str) {
+	// return str.size() - length of longest palindromic prefix
+	string newstr = str + "#";
+	reverse(str.begin(), str.end());
+	newstr += str;
+	int lenlpp = lps(newstr);
+	return str.size() - lenlpp;
+}

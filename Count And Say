@@ -1,0 +1,24 @@
+#include <bits/stdc++.h> 
+string writeAsYouSpeak(int n) 
+{
+	string str = "1";
+	n--;
+	while(n > 0) {
+		string newstr = "";
+		int count = 1;
+		for(int i = 1;i < str.size();i++) {
+			if(str[i - 1] == str[i]) {
+				count++;
+			} else {
+				newstr += to_string(count);
+				newstr += str[i - 1];
+				count = 1;
+			}
+		}
+		newstr += to_string(count);
+		newstr += str.back();
+		str = newstr;
+		n--;
+	} 
+	return str;
+}

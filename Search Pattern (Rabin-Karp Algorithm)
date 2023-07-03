@@ -1,0 +1,29 @@
+bool fullMatch(int i, string& text, string& pattern) {
+	for(int j = 0;j < pattern.size();j++) {
+		if(text[i + j] != pattern[j]) return false;
+	}
+	return true;
+}
+
+vector<int> stringMatch(string text, string pattern) {
+	long hvPattern = 0, hvCurrWindow = 0, mulf = 1, p = 37, mod = 1000000007, n = text.size(), m = pattern.size();
+	vector<int> res;
+
+	for(int i = 0;i < m;i++) {
+		hvPattern = (hvPattern * p + (pattern[i] - 'a')) % mod;
+		hvCurrWindow = (hvCurrWindow * p + (text[i] - 'a')) % mod;
+		if(i < m - 1) mulf = (mulf * p) % mod;
+	}
+
+	if(hvCurrWindow == hvPattern && fullMatch(0, text, pattern) == true) {
+		res.push_back(1);
+	}
+	for(int i = m;i < n;i++) {
+		hvCurrWindow = ((hvCurrWindow - ((text[i - m] - 'a') * mulf) % mod) % mod + mod) % mod;
+		hvCurrWindow = ((hvCurrWindow * p) % mod + (text[i] - 'a')) % mod;
+		if(hvCurrWindow == hvPattern && fullMatch(i - m + 1, text, pattern) == true) {
+			res.push_back(i - m + 2);
+		}
+	}
+	return res;
+}

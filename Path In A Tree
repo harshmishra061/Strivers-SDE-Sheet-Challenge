@@ -1,0 +1,18 @@
+bool findPath(TreeNode<int>* node, int x, vector<int>& res) {
+	if(node == NULL) return false;
+
+	if(node->data == x || findPath(node->left, x, res) || findPath(node->right, x, res)) {
+		res.push_back(node->data);
+		return true;
+	}
+
+	return false;
+}
+
+vector<int> pathInATree(TreeNode<int> *root, int x)
+{
+	vector<int> res;
+	findPath(root, x, res);
+	reverse(res.begin(), res.end());
+	return res;
+}

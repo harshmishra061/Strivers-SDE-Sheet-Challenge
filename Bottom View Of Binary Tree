@@ -1,0 +1,22 @@
+void preorder(BinaryTreeNode<int>* node, int& minvl, int& maxvl, int currl) {
+    if(node == NULL) return;
+    minvl = min(minvl, currl);
+    maxvl = max(maxvl, currl);
+    preorder(node->left, minvl, maxvl, currl - 1);
+    preorder(node->right, minvl, maxvl, currl + 1);
+}
+vector<int> bottomView(BinaryTreeNode<int> * root){
+    int minvl = 0, maxvl = 0;
+    preorder(root, minvl, maxvl, 0);
+    vector<int> res(maxvl - minvl + 1);
+    queue<pair<BinaryTreeNode<int>*, int>> q;
+    q.push({root, -minvl});
+    while(!q.empty()) {
+        root = q.front().first;
+        int vl = q.front().second; q.pop();
+        res[vl] = root->data;
+        if(root->left != NULL) q.push({root->left, vl - 1});
+        if(root->right != NULL) q.push({root->right, vl + 1});
+    }
+    return res;
+}

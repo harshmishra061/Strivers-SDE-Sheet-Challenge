@@ -1,0 +1,14 @@
+int maxHeight(BinaryTreeNode<int>* node) {
+    if(node == NULL) return 0;
+    int lHeight = maxHeight(node->left);
+    if(lHeight == 4000) return 4000;
+    int rHeight = maxHeight(node->right);
+    if(rHeight == 4000) return 4000;
+
+    if(abs(lHeight - rHeight) > 1) return 4000;
+    return 1 + max(lHeight, rHeight);
+}
+
+bool isBalancedBT(BinaryTreeNode<int>* root) {
+    return maxHeight(root) != 4000;
+}

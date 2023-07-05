@@ -1,0 +1,19 @@
+TreeNode<int>* constructTree(map<int, int>& idxOf, int inSt, int inEd, vector<int>& preorder, int preSt, int preEd) {
+    if(inSt > inEd) return NULL;
+    int rootVal = preorder[preSt];
+    TreeNode<int>* root = new TreeNode<int>(rootVal);
+    int idx = idxOf[rootVal];
+    int leftLen = idx - inSt;
+    root->left = constructTree(idxOf, inSt, idx - 1, preorder, preSt + 1, preSt + leftLen);
+    root->right = constructTree(idxOf, idx + 1, inEd, preorder, preSt + leftLen + 1, preEd);
+    return root;
+}
+
+TreeNode<int> *buildBinaryTree(vector<int> &inorder, vector<int> &preorder)
+{
+    int n = inorder.size();
+	map<int, int> idxOf;
+    for(int i = 0;i < n;i++) idxOf[inorder[i]] = i;
+
+    return constructTree(idxOf, 0, n - 1, preorder, 0, n - 1);
+}

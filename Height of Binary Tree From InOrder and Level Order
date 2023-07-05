@@ -1,0 +1,37 @@
+#include <bits/stdc++.h> 
+struct info {
+	int height;
+	int lIdxInInorder;
+	int rIdxInInorder;
+	info(int h, int l, int r) {
+		height = h;
+		lIdxInInorder = l;
+		rIdxInInorder = r;
+	}
+};
+int heightOfTheTree(vector<int>& inorder, vector<int>& levelOrder, int N){
+	
+	int maxHeight = 0;
+	map<int, int> IdxOf;
+	for(int i = 0;i < N;i++) IdxOf[inorder[i]] = i;
+	queue<info> q;
+	q.push(info(0, 0, N - 1));
+	for(int i = 0;i < N;i++) { // Traversing LevelOrder array and extracting info corresponding to node from queue
+		int rootval = levelOrder[i];
+		int rootIdxInInorder = IdxOf[rootval];
+		int height = q.front().height;
+		int lIdxInInorder = q.front().lIdxInInorder; // range corresponding to node in inorder
+		int rIdxInInorder = q.front().rIdxInInorder; q.pop();
+
+		maxHeight = max(maxHeight, height);
+
+		if(lIdxInInorder < rootIdxInInorder) { // root's left exist
+			q.push(info(height + 1, lIdxInInorder, rootIdxInInorder - 1));
+		}
+
+		if(rootIdxInInorder < rIdxInInorder) { // root's right exist
+			q.push(info(height + 1, rootIdxInInorder + 1, rIdxInInorder));
+		}
+	}
+	return maxHeight;
+}

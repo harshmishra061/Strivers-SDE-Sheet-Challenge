@@ -1,0 +1,18 @@
+void connectNodes(BinaryTreeNode< int > *root) {
+    while(root != NULL) {
+        BinaryTreeNode<int>* dummy = new BinaryTreeNode<int>(-1);
+        BinaryTreeNode<int>* itr = dummy;
+        while(root != NULL) {
+            if(root->left != NULL) {
+                itr->next = root->left;
+                itr = itr->next;
+            }
+            if(root->right != NULL) {
+                itr->next = root->right;
+                itr = itr->next;
+            }
+            root = root->next;
+        }
+        root = dummy->next;
+    }
+}

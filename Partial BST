@@ -8,3 +8,19 @@ bool isValidBST(BinaryTreeNode<int>* root, int mini, int maxi) {
 bool validateBST(BinaryTreeNode<int> *root) {
     return isValidBST(root, INT_MIN, INT_MAX);
 }
+
+// Another Method
+void inorder(BinaryTreeNode<int>* root, int& prev, bool& valid) {
+    if(root == NULL) return;
+    inorder(root->left, prev, valid);
+    if(prev > root->data) valid = false;
+    prev = root->data;
+    inorder(root->right, prev, valid);
+}
+
+bool validateBST(BinaryTreeNode<int> *root) {
+    bool valid = true;
+    int prev = INT_MIN;
+    inorder(root, prev, valid);
+    return valid;
+}

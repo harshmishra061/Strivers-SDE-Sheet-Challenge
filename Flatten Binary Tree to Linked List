@@ -1,0 +1,14 @@
+void revInorder(TreeNode<int>* root, TreeNode<int>** prev) {
+    if(root == NULL) return;
+    revInorder(root->right, prev);
+    revInorder(root->left, prev);
+    root->right = (*prev);
+    (*prev) = root;
+    root->left = NULL;
+}
+TreeNode<int> *flattenBinaryTree(TreeNode<int> *root)
+{
+    TreeNode<int>* prev = NULL;
+    revInorder(root, &prev);
+    return prev;
+}

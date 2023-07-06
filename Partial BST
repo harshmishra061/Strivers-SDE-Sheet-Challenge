@@ -1,0 +1,10 @@
+bool isValidBST(BinaryTreeNode<int>* root, int mini, int maxi) {
+    if(root == NULL) return true;
+    if(mini > root->data || root->data > maxi) return false;
+    if(isValidBST(root->left, mini, root->data) && isValidBST(root->right, root->data, maxi));
+}
+
+
+bool validateBST(BinaryTreeNode<int> *root) {
+    return isValidBST(root, INT_MIN, INT_MAX);
+}

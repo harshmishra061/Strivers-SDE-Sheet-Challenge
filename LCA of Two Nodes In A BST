@@ -1,0 +1,11 @@
+TreeNode<int>* LCAinaBST(TreeNode<int>* root, TreeNode<int>* P, TreeNode<int>* Q)
+{
+    int num1 = P->data, num2 = Q->data;
+
+    while(root != NULL) {
+        if(num1 < root->data && num2 < root->data) root = root->left;
+        else if(root->data < num1 && root->data < num2) root = root->right;
+        else return root;
+    }
+    return root;
+}

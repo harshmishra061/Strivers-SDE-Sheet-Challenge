@@ -1,0 +1,16 @@
+int idx;
+
+TreeNode<int>* constructTree(vector<int>& preOrder, int mini, int maxi) {
+    if(idx < preOrder.size() && mini < preOrder[idx] && preOrder[idx] < maxi) {
+        TreeNode<int>* root = new TreeNode<int>(preOrder[idx++]);
+        root->left = constructTree(preOrder, mini, root->data);
+        root->right = constructTree(preOrder, root->data, maxi);
+        return root;
+    }
+    return NULL;
+}
+
+TreeNode<int>* preOrderTree(vector<int> &preOrder){
+    idx = 0;
+    return constructTree(preOrder, INT_MIN, INT_MAX);
+}

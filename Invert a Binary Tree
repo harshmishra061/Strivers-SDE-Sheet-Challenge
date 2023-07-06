@@ -1,0 +1,20 @@
+TreeNode<int> * invertBinaryTree(TreeNode<int> *root, TreeNode<int> *leaf)
+{
+	if(root == NULL) return NULL;
+    if(root->data == leaf->data) return root;
+
+    TreeNode<int>* foundNode = invertBinaryTree(root->left, leaf);
+    if(foundNode != NULL) {
+        root->left->left = root;
+        root->left = NULL;
+        return foundNode;
+    }
+    foundNode = invertBinaryTree(root->right, leaf);
+    if(foundNode != NULL) {
+        root->right->left = root;
+        root->right = root->left;
+        root->left = NULL;
+        return foundNode;
+    }
+    return NULL;
+}

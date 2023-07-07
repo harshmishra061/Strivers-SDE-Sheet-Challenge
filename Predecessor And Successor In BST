@@ -1,0 +1,30 @@
+pair<int,int> predecessorSuccessor(BinaryTreeNode<int>* root, int key)
+{
+    int succ = -1, pred = -1;
+    while(root->data != key) {
+        if(key < root->data) {
+            succ = root->data;
+            root = root->left;
+        } else {
+            pred = root->data;
+            root = root->right;
+        }
+    }
+    if(root->left != NULL) {
+        BinaryTreeNode<int>* temp = root->left;
+        while(temp->right != NULL) {
+            temp = temp->right; 
+        }
+        pred = temp->data;
+    }
+
+    if(root->right != NULL) {
+        BinaryTreeNode<int>* temp = root->right;
+        while(temp->left != NULL) {
+            temp = temp->left;
+        }
+        succ = temp->data;
+    }
+
+    return {pred, succ};
+}

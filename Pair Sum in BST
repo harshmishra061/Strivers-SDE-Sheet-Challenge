@@ -1,0 +1,12 @@
+bool inorder(BinaryTreeNode<int>* root, int k, unordered_set<int>& s) {
+    if(root == NULL) return false;
+    if(inorder(root->left, k, s)) return true;
+    if(s.count(k - root->data)) return true;
+    s.insert(root->data);
+    return inorder(root->right, k, s);
+}
+bool pairSumBst(BinaryTreeNode<int> *root, int k)
+{
+    unordered_set<int> s;
+    return inorder(root, k, s);
+}

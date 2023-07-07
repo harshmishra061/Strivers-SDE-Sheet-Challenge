@@ -1,0 +1,15 @@
+// Morris Traversal is not working for this problem on codestudio
+
+void findInOrder(TreeNode<int>* root, vector<int>& inorder) {
+    if(root == NULL) return;
+    findInOrder(root->left, inorder);
+    inorder.push_back(root->data);
+    findInOrder(root->right, inorder);
+}
+
+int kthSmallest(TreeNode<int> *root, int k)
+{
+	vector<int> inorder;
+    findInOrder(root, inorder);
+    return inorder[k - 1];
+}

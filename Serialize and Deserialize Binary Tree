@@ -1,0 +1,30 @@
+string serializeTree(TreeNode<int> *root)
+{   // Use Preorder
+    if(root == NULL) return "N";
+    string res = to_string(root->data);
+    string left = serializeTree(root->left);
+    string right = serializeTree(root->right);
+    res += "#" + left + "#" + right;
+    return res;
+}
+
+TreeNode<int>* deserializeTree(string& serialized, int& i) {
+    if(serialized[i] == 'N') {
+        i += 2;
+        return NULL;
+    }
+    int num = 0;
+    while(serialized[i] != '#') num = num * 10 + (serialized[i++] - '0'); 
+    i++;
+    TreeNode<int>* root = new TreeNode<int>(num);
+    root->left = deserializeTree(serialized, i);
+    root->right = deserializeTree(serialized, i);
+    return root;
+}
+
+
+TreeNode<int>* deserializeTree(string &serialized)
+{
+    int i = 0;
+    return deserializeTree(serialized, i);
+}

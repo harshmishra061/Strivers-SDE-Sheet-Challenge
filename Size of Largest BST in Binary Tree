@@ -1,0 +1,28 @@
+struct Node {
+    int sz;
+    int mini;
+    int maxi;
+
+    Node(int s, int mi, int ma) {
+        sz = s;
+        mini = mi;
+        maxi = ma;
+    }
+};
+
+Node findBST(TreeNode<int>* root) {
+    if(root == NULL) return Node(0, INT_MAX, INT_MIN);
+
+    Node left = findBST(root->left);
+    Node right = findBST(root->right);
+
+    if(left.maxi < root->data && root->data < right.mini) {
+        return Node(left.sz + right.sz + 1, min(left.mini, root->data), max(right.maxi, root->data));
+    }
+    return Node(max(left.sz, right.sz), INT_MIN, INT_MAX);
+}
+
+int largestBST(TreeNode<int>* root) 
+{
+    return findBST(root).sz;
+}

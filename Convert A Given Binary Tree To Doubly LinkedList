@@ -1,0 +1,17 @@
+BinaryTreeNode<int>* dummy, *itr;
+
+void inorder(BinaryTreeNode<int>* node) {
+    if(node == NULL) return;
+    inorder(node->left);
+    itr->right = node;
+    node->left = itr;
+    itr = itr->right;
+    inorder(node->right);
+}
+
+
+BinaryTreeNode<int>* BTtoDLL(BinaryTreeNode<int>* root) {
+    itr = dummy = new BinaryTreeNode<int>(-1);
+    inorder(root);
+    return dummy->right;
+}

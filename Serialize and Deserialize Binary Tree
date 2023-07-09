@@ -1,30 +1,73 @@
+//1ST METHOD - UNSIG INORDER
 string serializeTree(TreeNode<int> *root)
-{   // Use Preorder
-    if(root == NULL) return "N";
-    string res = to_string(root->data);
-    string left = serializeTree(root->left);
-    string right = serializeTree(root->right);
-    res += "#" + left + "#" + right;
-    return res;
+{
+    string str = "";
+    if(root == NULL) return str;
+    queue<TreeNode<int>*> q;
+    q.push(root);
+    while(!q.empty()) {
+        root = q.front(); q.pop();
+        if(root != NULL) {
+            str += to_string(root->data) + ",";
+            q.push(root->left);
+            q.push(root->right);
+        } else {
+            str += "N,";
+        }
+    }
+    return str;
 }
 
-TreeNode<int>* deserializeTree(string& serialized, int& i) {
-    if(serialized[i] == 'N') {
-        i += 2;
-        return NULL;
+TreeNode<int>* deserializeTree(string &str)
+{
+    if(str == "") return NULL;
+    stringstream ss(str);
+    string nodeVal;
+    getline(ss, nodeVal, ',');
+    
+    TreeNode<int>* root = new TreeNode<int>(stoi(nodeVal));
+    queue<TreeNode<int>*> q;
+    q.push(root);
+    while(!q.empty()) {
+        TreeNode<int>* node = q.front(); q.pop();
+        getline(ss, nodeVal, ',');
+        
+        if(nodeVal != "N") {
+            node->left = new TreeNode<int>(stoi(nodeVal));
+            q.push(node->left);
+        }
+
+        getline(ss, nodeVal, ',');
+        if(nodeVal != "N") {
+            node->right = new TreeNode<int>(stoi(nodeVal));
+            q.push(node->right);
+        }
     }
-    int num = 0;
-    while(serialized[i] != '#') num = num * 10 + (serialized[i++] - '0'); 
-    i++;
-    TreeNode<int>* root = new TreeNode<int>(num);
-    root->left = deserializeTree(serialized, i);
-    root->right = deserializeTree(serialized, i);
     return root;
 }
 
 
-TreeNode<int>* deserializeTree(string &serialized)
+METHOD 2 : USING PREORDER
+
+string serializeTree(TreeNode<int> *root)
 {
-    int i = 0;
-    return deserializeTree(serialized, i);
+    if(root == NULL) return "N ";
+    return to_string(root->data) + " " + serializeTree(root->left) + serializeTree(root->right);
+}
+
+
+TreeNode<int>* deserializeTree(stringstream& ss) {
+    string nodeVal;
+    ss >> nodeVal;
+    if(nodeVal == "N") return NULL;
+    TreeNode<int>* root = new TreeNode<int>(stoi(nodeVal));
+    root->left = deserializeTree(ss);
+    root->right = deserializeTree(ss);
+    return root;
+}
+
+TreeNode<int>* deserializeTree(string &str)
+{
+    stringstream ss(str);
+    return deserializeTree(ss);
 }

@@ -1,3 +1,4 @@
+// DFS
 map<graphNode*, graphNode*> mp;
 
 graphNode *cloneGraph(graphNode *node)
@@ -6,6 +7,28 @@ graphNode *cloneGraph(graphNode *node)
 	mp[node] = new graphNode(node->data);
 	for(auto nbr : node->neighbours) {
 		mp[node]->neighbours.push_back(cloneGraph(nbr));
+	}
+	return mp[node];
+}
+
+// BFS
+graphNode *cloneGraph(graphNode *node)
+{
+    queue<graphNode*> q;
+	map<graphNode*, graphNode*> mp;
+	
+	mp[node] = new graphNode(node->data);
+	q.push(node);
+
+	while(!q.empty()) {
+		graphNode* nodee = q.front(); q.pop();
+		for(auto nbr : nodee->neighbours) {
+			if(mp.find(nbr) == mp.end()) {
+				mp[nbr] = new graphNode(nbr->data);
+				q.push(nbr);
+			}
+			mp[nodee]->neighbours.push_back(mp[nbr]);
+		}
 	}
 	return mp[node];
 }

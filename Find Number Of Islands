@@ -1,0 +1,61 @@
+// DFS
+void removeIsland(int i, int j, int& n, int& m, int** arr, vector<vector<int>>& dir) {
+   arr[i][j] = 0;
+   for(int k = 0;k < 8;k++) {
+      int newi = i + dir[k][0];
+      int newj = j + dir[k][1];
+      if(newi >= 0 && newi < n && newj >= 0 && newj < m && arr[newi][newj] == 1) {
+         removeIsland(newi, newj, n, m, arr, dir);
+      }
+   }
+}
+
+int getTotalIslands(int** arr, int n, int m)
+{
+   int count = 0;
+   vector<vector<int>> dir = {{0, 1},{0, -1},{1, 0},{-1, 0},{-1, 1},{-1, -1},{1, 1},{1, -1}};
+
+   for(int i = 0;i < n;i++) {
+      for(int j = 0;j < m;j++) {
+         if(arr[i][j] == 1) {
+            count++;
+            removeIsland(i, j, n, m, arr, dir);
+         }
+      }
+   }
+
+   return count;
+}
+
+
+// BFS
+#include<bits/stdc++.h>
+int getTotalIslands(int** arr, int n, int m)
+{
+   int count = 0;
+   vector<vector<int>> dir = {{0, 1},{0, -1},{1, 0},{-1, 0},{-1, 1},{-1, -1},{1, 1},{1, -1}};
+
+   for(int i = 0;i < n;i++) {
+      for(int j = 0;j < m;j++) {
+         if(arr[i][j] == 1) {
+            count++;
+            queue<pair<int, int>> q;
+            q.push({i, j});
+            arr[i][j] = 0;
+            while(!q.empty()) {
+               int idash = q.front().first;
+               int jdash = q.front().second; q.pop();
+               for(int k = 0;k < 8;k++) {
+                  int newi = idash + dir[k][0];
+                  int newj = jdash + dir[k][1];
+                  if(newi >= 0 && newj >= 0 && newi < n && newj < m && arr[newi][newj] == 1) {
+                     arr[newi][newj] = 0;
+                     q.push({newi, newj});
+                  }
+               }
+            }
+         }
+      }
+   }
+   return count;
+}

@@ -1,0 +1,49 @@
+#include<bits/stdc++.h>
+void dfs(int node, stack<int>& st, vector<bool>& visited, vector<vector<int>>& adj) {
+    visited[node] = true;
+    for(auto& nbr : adj[node]) {
+        if(visited[nbr] == true) continue;
+        dfs(nbr, st, visited, adj);
+    }
+    st.push(node);
+}
+
+void dfs2(int node, vector<bool>& visited, vector<vector<int>>& adj, vector<int>& vec) {
+    visited[node] = true;
+    vec.push_back(node);
+    for(auto& nbr : adj[node]) {
+        if(visited[nbr] == true) continue;
+        dfs2(nbr, visited, adj, vec);
+    }
+}
+1. Sort all the nodes according to their finishing time (to get nodes of second SCC after first SCC)
+2. Reverse all the edges of the entire graph (to break the dfs going to other SCC)
+3. Perform the DFS and count the no. of different DFS calls to get the no. of SCC 
+vector<vector<int>> stronglyConnectedComponents(int n, vector<vector<int>> &edges)
+{
+    vector<vector<int>> adj(n);
+    vector<vector<int>> radj(n);
+    for(auto& edge : edges) {
+        adj[edge[0]].push_back(edge[1]);
+        radj[edge[1]].push_back(edge[0]);
+    }
+
+    vector<bool> visited(n, false);
+    stack<int> st;
+    for(int i = 0;i < n;i++) {
+        if(visited[i] == true) continue;
+        dfs(i, st, visited, adj);
+    }
+
+    vector<vector<int>> res;
+    visited = vector<bool>(n, false);
+    while(!st.empty()) {
+        int node = st.top(); st.pop();
+        if(visited[node] == true) continue;
+        vector<int> vec;
+        dfs2(node, visited, radj, vec);
+        res.push_back(vec);
+    }
+    return res;
+
+}

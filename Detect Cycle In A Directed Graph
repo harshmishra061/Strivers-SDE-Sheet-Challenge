@@ -1,0 +1,57 @@
+// color[node] = 1 -------> node is present in currStack
+// color[node] = 2 -------> node is visted But not present in currStack
+// BFS
+
+bool isCyclePresent(int node, vector<vector<int>>& adj, vector<int>& color) {
+  color[node] = 1;
+  for(auto& nbr : adj[node]) {
+    if(color[nbr] == 0) {
+      if(isCyclePresent(nbr, adj, color)) return true;
+    } else if(color[nbr] == 1) return true;
+  }
+  color[node] = 2;
+  return false;
+}
+int detectCycleInDirectedGraph(int n, vector < pair < int, int >> & edges) {
+    vector<vector<int>> adj(n);
+    for(auto& edge : edges) {
+      adj[edge.first - 1].push_back(edge.second - 1);
+    }
+
+    vector<int> color(n, 0);
+    for(int i = 0;i < n;i++) {
+      if(color[i] != 0) continue;
+      if(isCyclePresent(i, adj, color)) return true;
+    }
+    return false;
+}
+
+// DFS -------------> Toposort
+
+#include<bits/stdc++.h>
+int detectCycleInDirectedGraph(int n, vector < pair < int, int >> & edges) {
+    vector<vector<int>> adj(n);
+    vector<int> indegree(n, 0);
+    for(auto& edge : edges) {
+      adj[edge.first - 1].push_back(edge.second - 1);
+      indegree[edge.second - 1]++;
+    }
+
+    queue<int> q;
+    for(int i = 0;i < n;i++) {
+      if(indegree[i] == 0) {
+        q.push(i);
+      }
+    }
+
+    int cnt = 0;
+    while(!q.empty()) {
+      int node = q.front(); q.pop();
+      cnt++;
+      for(auto& nbr : adj[node]) {
+        indegree[nbr]--;
+        if(indegree[nbr] == 0) q.push(nbr);
+      }
+    }
+    return cnt != n; // toposort of length 'n' not exist
+}

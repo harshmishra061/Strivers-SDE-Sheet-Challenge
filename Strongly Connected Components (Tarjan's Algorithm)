@@ -1,0 +1,58 @@
+#include<bits/stdc++.h>
+int t;
+vector<int> desc;
+vector<int> low;
+vector<bool> visited;
+vector<bool> inStack;
+stack<int> st;
+
+void dfs(int node, vector<vector<int>>& adj, vector<vector<int>>& res) {
+    visited[node] = true;
+    desc[node] = low[node] = t;
+    st.push(node);
+    inStack[node] = true;
+    t++;
+    
+    for(auto& nbr : adj[node]) {
+        if(!visited[nbr]) {
+            dfs(nbr, adj, res);
+            low[node] = min(low[node], low[nbr]);
+        } else if(inStack[nbr] == true) {
+            low[node] = min(low[node], desc[nbr]);
+        }
+    }
+
+    if(desc[node] == low[node]) {
+        vector<int> vec;
+        while(st.top() != node) {
+            int val = st.top(); st.pop();
+            inStack[val] = false;
+            vec.push_back(val);
+        }
+        st.pop();
+        inStack[node] = false;
+        vec.push_back(node);
+        res.push_back(vec);
+    }
+}
+
+vector<vector<int>> stronglyConnectedComponents(int n, vector<vector<int>> &edges)
+{
+    // Detect bridges ---> Tarjan's Algorithm
+    vector<vector<int>> adj(n);
+    for(auto& edge : edges) {
+        adj[edge[0]].push_back(edge[1]);
+    }
+    t = 0;
+    desc = vector<int>(n);
+    low = vector<int>(n);
+    visited = vector<bool>(n, false);
+    inStack = vector<bool>(n, false);
+    vector<vector<int>> res;
+    
+    for(int i = 0;i < n;i++) {
+        if(visited[i]) continue;
+        dfs(i, adj, res);
+    }
+    return res;
+}

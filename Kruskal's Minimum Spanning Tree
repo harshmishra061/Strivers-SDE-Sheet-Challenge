@@ -1,0 +1,32 @@
+#include <bits/stdc++.h> 
+
+int findPar(int x, vector<int>& par) {
+	if(x == par[x]) return x;
+	return par[x] = findPar(par[x], par);
+}
+
+int kruskalMST(int n, int m, vector<vector<int>> &graph) {
+	sort(graph.begin(), graph.end(), [](vector<int> &a, vector<int> &b) {
+		return a[2] < b[2];
+	});
+
+	vector<int> par(n + 1);
+	for(int i = 1; i <= n;i++) par[i] = i;
+
+	int minCost = 0;
+
+	for(auto& edge : graph) {
+		int u = edge[0], v = edge[1], wt = edge[2];
+
+		u = findPar(u, par);
+		v = findPar(v, par);
+
+		if(u == v) continue; // merging u and v will form cycle
+
+		minCost += wt;
+
+		par[v] = u;
+	}
+
+	return minCost;
+}

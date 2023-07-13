@@ -1,0 +1,65 @@
+// Recursive Approach
+#include <bits/stdc++.h> 
+bool isPalindromic(string& str, int i, int j) {
+    while(i < j) {
+        if(str[i] != str[j]) return false;
+        i++, j--;
+    }
+    return true;
+}
+
+vector<vector<int>> dp;
+
+int minPartitions(int i, int j, string& str) {
+    if(isPalindromic(str, i, j) == true) return 0;
+
+    if(dp[i][j] != -1) return dp[i][j];
+
+    int minPar = INT_MAX;
+    for(int k = i;k < j;k++) {
+        int minPar1 = minPartitions(i, k, str);
+        int minPar2 = minPartitions(k + 1, j, str);
+
+        minPar = min(minPar, 1 + minPar1 + minPar2);
+    }
+
+    return dp[i][j] = minPar;
+}
+
+int palindromePartitioning(string str) {
+    dp = vector<vector<int>>(str.size(), vector<int>(str.size(), -1));
+    return minPartitions(0, str.size() - 1, str);
+}
+
+
+// Tabulation
+#include <bits/stdc++.h> 
+bool isPalindromic(string& str, int i, int j) {
+    while(i < j) {
+        if(str[i] != str[j]) return false;
+        i++, j--;
+    }
+    return true;
+}
+
+int palindromePartitioning(string str) {
+    int n = str.size();
+    vector<vector<int>> dp(n, vector<int>(n));
+
+    for(int g = 0;g < n;g++) {
+        for(int i = 0, j = g;j < n;i++, j++) {
+            if(isPalindromic(str, i, j)) {
+                dp[i][j] = 0;
+            } else {
+                int minPar = INT_MAX;
+                for(int k = i;k < j;k++) {
+                    int minPar1 = dp[i][k];
+                    int minPar2 = dp[k + 1][j];
+                    minPar = min(minPar, 1 + minPar1 + minPar2);
+                }
+                dp[i][j] = minPar;
+            }
+        }
+    }
+    return dp[0][n - 1];
+}

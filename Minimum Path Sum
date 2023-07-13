@@ -1,0 +1,20 @@
+#include <bits/stdc++.h>
+
+vector<vector<int>> dp;
+int minSumPath(int i, int j, vector<vector<int>>& grid) {
+    if(i >= grid.size() || j >= grid[0].size()) return 100000000;
+
+    if(i == grid.size() - 1 && j == grid[0].size() - 1) return grid[i][j];
+
+    if(dp[i][j] != -1) return dp[i][j];
+    
+    int minCostIfMovedRight = grid[i][j] + minSumPath(i, j + 1, grid);
+    int minCostIfMovedDown = grid[i][j] + minSumPath(i + 1, j, grid);
+
+    return dp[i][j] = min(minCostIfMovedRight, minCostIfMovedDown);
+}
+
+int minSumPath(vector<vector<int>> &grid) {
+    dp = vector<vector<int>>(grid.size(), vector<int>(grid[0].size(), -1));
+    return minSumPath(0, 0, grid);
+}

@@ -1,0 +1,52 @@
+Recursive Approach
+#include <bits/stdc++.h> 
+
+int minCost(int i, int j, vector<int>& arr) {
+    if(i == j) {
+        return 0;
+    }
+
+    int cost = INT_MAX;
+    for(int k = i;k < j;k++) {
+        int cost1 = minCost(i, k, arr);
+        int cost2 = minCost(k + 1, j, arr);
+        int overAllCost = cost1 + cost2 + arr[i] * arr[k + 1] * arr[j + 1];
+        cost = min(cost, overAllCost);
+    }
+
+    return cost;
+}
+
+int matrixMultiplication(vector<int> &arr, int N)
+{
+    return minCost(0, N - 1, arr);
+}
+
+
+
+// Tabulation
+#include <bits/stdc++.h> 
+
+int matrixMultiplication(vector<int> &arr, int N)
+{
+    N--;
+    
+    vector<vector<int>> dp(N, vector<int>(N));
+    for(int g = 0;g < N;g++) {
+        for(int i = 0, j = g;j < N;i++, j++) {
+            if(g == 0) {
+                dp[i][j] = 0;
+            } else {
+                int cost = INT_MAX;
+                for(int k = i;k < j;k++) {
+                    int cost1 = dp[i][k];
+                    int cost2 = dp[k + 1][j];
+                    int overAllCost = cost1 + cost2 + arr[i] * arr[k + 1] * arr[j + 1];
+                    cost = min(cost, overAllCost);
+                }
+                dp[i][j] = cost;
+            }
+        }
+    }
+    return dp[0][N - 1];
+}

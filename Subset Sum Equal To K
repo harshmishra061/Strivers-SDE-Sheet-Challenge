@@ -1,0 +1,68 @@
+// Recursive Approach -> TLE
+bool subsetSumToK2(int n, int k, vector<int>& arr) {
+    if(k == 0) return true;
+    if(n == 0) return false;
+    if(dp[n][k] != -1) dp[n][k] ? true : false;
+
+
+    if(subsetSumToK2(n - 1, k, arr)) {
+        dp[n][k] = 1;
+        return true;
+    }
+    
+    if(arr[n - 1] <= k) {
+        if(subsetSumToK2(n - 1, k - arr[n - 1], arr)) {
+            dp[n][k] = 1;
+            return true;
+        }
+    }
+
+    dp[n][k] = 0;
+    return false;
+}
+
+bool subsetSumToK(int n, int k, vector<int> &arr) {
+    dp = vector<vector<int>>(n + 1, vector<int>(k + 1, -1));
+    return subsetSumToK2(n, k, arr);
+}
+
+
+// Tabulation
+
+#include <bits/stdc++.h> 
+bool subsetSumToK(int n, int k, vector<int> &arr) {
+    vector<vector<bool>> dp(n + 1, vector<bool>(k + 1));
+
+    for(int i = 0; i <= n;i++) {
+        for(int j = 0;j <= k;j++) {
+            if(j == 0) { // sum 0 is always possible to make
+                dp[i][j] = true;
+            } else if(i == 0) {
+                dp[i][j] = false;
+            } else {
+                dp[i][j] = dp[i - 1][j];
+                if(j - arr[i - 1] >= 0) {
+                    dp[i][j] = dp[i][j] || dp[i - 1][j - arr[i - 1]];
+                }
+            }
+        }
+    }
+    return dp[n][k];
+}
+
+
+// Tabulation 1D DP
+#include <bits/stdc++.h> 
+bool subsetSumToK(int n, int k, vector<int> &arr) {
+    vector<bool> dp(k + 1, false);
+    dp[0] = true;
+
+    for(int i = 1; i <= n;i++) {
+        for(int j = k - arr[i - 1];j >= 0;j--) {
+            if(dp[j] == true) {
+                dp[j + arr[i - 1]] = true;
+            }
+        }
+    }
+    return dp[k];
+}

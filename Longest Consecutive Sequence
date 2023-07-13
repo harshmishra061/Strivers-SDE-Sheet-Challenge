@@ -1,6 +1,24 @@
 #include <bits/stdc++.h>
 
 int lengthOfLongestConsecutiveSequence(vector<int> &arr, int n) {
+    unordered_set<int> s(arr.begin(), arr.end());
+    
+    int res = 0;
+
+    for(int i = 0;i < n;i++) {
+        if(s.find(arr[i] - 1) == s.end()) { // first ele of inc sequence
+            int len = 0;
+            while(s.find(arr[i] + len) != s.end()) len++;
+            res = max(res, len);
+        }
+    }
+    return res;
+}
+
+// Other Method
+#include <bits/stdc++.h>
+
+int lengthOfLongestConsecutiveSequence(vector<int> &arr, int n) {
     map<int, bool> startOfSeq;
     for(int i = 0;i < n;i++) {
         startOfSeq[arr[i]] = true;

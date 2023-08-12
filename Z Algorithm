@@ -3,13 +3,13 @@ vector<int> ZAlgo(string& str) {
 	vector<int> zarr(n);
 	int l = 1, r = 1;
 	for(int i = 1;i < n;i++) {
-		if(i < r) {
-			zarr[i] = min(zarr[i - l], r - i);
+		if(i <= r) {
+			zarr[i] = min(zarr[i - l], r - i + 1);
 		}
 		while(i + zarr[i] < n && str[zarr[i]] == str[i + zarr[i]]) zarr[i]++;
-		if(i + zarr[i] > r) {
+		if(i + zarr[i] - 1 > r) {
 			l = i;
-			r = i + zarr[i];
+			r = i + zarr[i] - 1;
 		}
 	}
 	return zarr;
